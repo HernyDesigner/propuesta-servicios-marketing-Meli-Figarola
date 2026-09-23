@@ -1,0 +1,387 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+/* ───────── VARIABLES GLOBALES ───────── */
+:root {
+  --lado: 200px;
+  /* Tamaño del cuadrado (ancho y alto de cada cara)  */
+  --duracion: 1.35s;
+  /* Velocidad de la rotación                         */
+  --prof: calc(var(--lado)/2);
+  /* Profundidad = mitad del lado (translateZ)    */
+  --body-font: "Montserrat", sans-serif;
+  --royalViolet: #871DEE;
+  --body-color: #E7E7E7;
+}
+
+.text-royal-violet {
+  color: var(--royalViolet);
+}
+
+.border-l-royal-violet {
+  border-left: 4px solid var(--royalViolet);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  /* min-height:100vh; 
+    display:grid;
+    place-items:center;*/
+  /*background:#111 !important; */
+  background: #000000;
+  font-family: var(--body-font);
+  /* overflow: hidden; */
+  /* position: relative; */
+}
+
+/* ───────── ESCENA CON PERSPECTIVA ───────── */
+.loader {
+  z-index: 1;
+  width: var(--lado);
+  height: var(--lado);
+  perspective: 400px;
+  /* Inicialmente visible */
+  opacity: 1;
+  visibility: visible;
+}
+
+.loader-text {
+  position: absolute;
+  /* background:#111; */
+  color: white;
+  /* width:100%; */
+  text-align: center;
+  z-index: 2;
+  padding: 0.25em 0 1em 0;
+  letter-spacing: 0.65em;
+}
+
+/* ───────── CUADRADO GIRATORIO ───────── */
+.square {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  animation: giro var(--duracion) cubic-bezier(.76, 0, .24, 1) infinite;
+  position: relative;
+  z-index: 9999;
+}
+
+/* ───────── CARAS ───────── */
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  backface-visibility: hidden;
+}
+
+/* Distribución 90° alrededor del eje Y */
+.front {
+  transform: rotateY(0deg) translateZ(var(--prof));
+}
+
+.right {
+  transform: rotateY(90deg) translateZ(var(--prof));
+}
+
+.back {
+  transform: rotateY(180deg) translateZ(var(--prof));
+}
+
+.left {
+  transform: rotateY(270deg) translateZ(var(--prof));
+}
+
+/* ───────── ANIMACIÓN ───────── */
+@keyframes giro {
+  to {
+    transform: rotateY(90deg);
+  }
+}
+
+/* ───────── RED ANIMADA INTERACTIVA ───────── */
+a-waves {
+  --x: -0.5rem;
+  --y: 50%;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+
+  overflow: hidden;
+  /* Inicialmente oculto */
+  opacity: 0;
+  visibility: hidden;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 0.5rem;
+    height: 0.5rem;
+
+    background: #333333;
+    border-radius: 50%;
+
+    transform: translate3d(calc(var(--x) - 50%), calc(var(--y) - 50%), 0);
+
+    will-change: transform;
+
+    content: "";
+  }
+
+  svg {
+    display: block;
+    padding: 2rem;
+    width: 100%;
+    height: 100%;
+
+    path {
+      fill: none;
+      stroke: #333333;
+      stroke-width: 1px;
+    }
+  }
+}
+
+/* ───────── HEADER ───────── */
+header {
+  position: fixed;
+  top: 10px;
+  top: -100px;
+  opacity: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1;
+}
+
+header nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+header nav ul {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0 3em;
+  margin: 0;
+}
+
+header nav ul li a {
+  color: var(--body-color);
+  padding: 3.5em 0;
+  margin: 0;
+  display: block;
+}
+
+/* .taglineAnim{ */
+/* font-size: 6rem;  var(--text-9xl); 8rem (128px)  */
+/* line-height: 0.95em;   var(--text-9xl--line-height); 1 */
+/* transition-duration:1s; */
+/* } */
+/* .taglineAnim span{
+  font-size: 4.72rem;
+}
+.taglineAnim span.text-royal-violet{
+  font-size: 6.43rem;
+} */
+.taglineAnim {
+  font-size: 8vw;
+  /* var(--text-9xl); 8rem (128px)  */
+  line-height: 0.95em;
+  /*var(--text-9xl--line-height); 1 */
+  transition-duration: 1s;
+}
+
+.taglineAnim span {
+  font-size: 6.5vw;
+  transition-duration: 1s;
+}
+
+.taglineAnim span.text-royal-violet {
+  font-size: 8.45vw;
+  transition-duration: 1s;
+}
+
+.taglineAnimToggle {
+  font-size: 2rem !important;
+  /*100vw;*/
+  transform: translate(100px, 100vh);
+  transition-duration: 1s;
+}
+
+/*---tagline section 03---*/
+#section-03 .taglineAnim {
+  font-size: calc(8vw / 1.7);
+  /* var(--text-9xl); 8rem (128px)  */
+  line-height: 0.95em;
+  /*var(--text-9xl--line-height); 1 */
+  transition-duration: 1s;
+}
+
+#section-03 .taglineAnim span {
+  font-size: calc(6.5vw / 1.7);
+  transition-duration: 1s;
+}
+
+#section-03 .taglineAnim span.text-royal-violet {
+  font-size: calc(8.45vw / 1.7);
+  transition-duration: 1s;
+}
+
+
+/* BULLET ANIM */
+.bullet-anim {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --color: #871DEE;
+  --animation: 2s ease-in-out infinite;
+}
+
+.bullet-anim .bullet-anim-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border: solid 1px var(--color);
+  border-radius: 50%;
+  margin: 0 10px;
+  background-color: transparent;
+  animation: circle-keys var(--animation);
+}
+
+.bullet-anim .bullet-anim-circle .bullet-anim-dot {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color);
+  animation: dot-keys var(--animation);
+}
+
+.bullet-anim .bullet-anim-circle .bullet-anim-outline {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  animation: outline-keys var(--animation);
+}
+
+.bullet-anim-circle:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.bullet-anim-circle:nth-child(3) {
+  animation-delay: 0.6s;
+}
+
+.bullet-anim-circle:nth-child(4) {
+  animation-delay: 0.9s;
+}
+
+.bullet-anim-circle:nth-child(5) {
+  animation-delay: 1.2s;
+}
+
+.bullet-anim-circle:nth-child(2) .bullet-anim-dot {
+  animation-delay: 0.3s;
+}
+
+.bullet-anim-circle:nth-child(3) .bullet-anim-dot {
+  animation-delay: 0.6s;
+}
+
+.bullet-anim-circle:nth-child(4) .bullet-anim-dot {
+  animation-delay: 0.9s;
+}
+
+.bullet-anim-circle:nth-child(5) .bullet-anim-dot {
+  animation-delay: 1.2s;
+}
+
+.bullet-anim-circle:nth-child(1) .bullet-anim-outline {
+  animation-delay: 0.9s;
+}
+
+.bullet-anim-circle:nth-child(2) .bullet-anim-outline {
+  animation-delay: 1.2s;
+}
+
+.bullet-anim-circle:nth-child(3) .bullet-anim-outline {
+  animation-delay: 1.5s;
+}
+
+.bullet-anim-circle:nth-child(4) .bullet-anim-outline {
+  animation-delay: 1.8s;
+}
+
+.bullet-anim-circle:nth-child(5) .bullet-anim-outline {
+  animation-delay: 2.1s;
+}
+
+@keyframes circle-keys {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  50% {
+    transform: scale(1.5);
+    opacity: 0.5;
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes dot-keys {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(0);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes outline-keys {
+  0% {
+    transform: scale(0);
+    outline: solid 20px var(--color);
+    outline-offset: 0;
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1);
+    outline: solid 0 transparent;
+    outline-offset: 20px;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,412 @@
+/* Basic Reset & Font */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #0a0a0a; /* Dark background */
+    color: #e0e0e0; /* Light gray text */
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    position: relative; /* Needed for background pattern */
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    padding-bottom: 80px; /* Space for footer */
+}
+
+/* --- Background Pattern (Approximation) --- */
+/* NOTE: The original wavy pattern is complex.
+   An SVG background-image is the best way to replicate it exactly.
+   This gradient is a *very* basic simulation. */
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: repeating-linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0.02),
+        rgba(255, 255, 255, 0.02) 1px,
+        transparent 1px,
+        transparent 50px /* Adjust spacing */
+    ),
+    repeating-linear-gradient(
+        -45deg,
+        rgba(255, 255, 255, 0.015),
+        rgba(255, 255, 255, 0.015) 1px,
+        transparent 1px,
+        transparent 60px /* Adjust spacing */
+    );
+    background-size: 200% 200%; /* Make pattern larger */
+    opacity: 0.5; /* Make lines subtle */
+    z-index: -1; /* Place behind content */
+    /* Add animation for subtle movement (optional) */
+    /* animation: wavePattern 30s linear infinite; */
+}
+
+/* Optional animation for the background */
+@keyframes wavePattern {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 200%; }
+}
+
+
+/* --- General Layout --- */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    position: relative; /* Ensure content is above pseudo-element */
+    z-index: 1;
+}
+
+/* --- Header & Navigation --- */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-bottom: 60px; /* Space below header */
+}
+
+.logo .logo-img {
+    width: 60px; /* Adjust size as needed */
+    height: 60px;
+    background-color: #9333ea; /* Purple background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 10px; /* Rounded corners */
+    /* Replace background-color with actual image styling if needed */
+    /* object-fit: contain; */
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 25px; /* Space between links */
+}
+
+nav ul li a {
+    color: #c0c0c0; /* Lighter gray for links */
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #ffffff;
+}
+
+/* --- Hero Section --- */
+.hero {
+    display: flex;
+    /* align-items: center; */ /* Cambiado para estirar */
+    align-items: stretch;     /* Hace que los hijos (texto e imagen) llenen la altura */
+    gap: 40px;
+    /* margin-bottom: 60px; */ /* Quitar margen inferior si queremos que toque el borde */
+    min-height: 100vh;         /* Asegura que la sección ocupe al menos toda la altura de la ventana */
+    /* position: relative; */  /* Puede ser útil si añades elementos posicionados absolutamente */
+}
+
+.hero-text {
+    flex: 1;
+    /* max-width: 55%; */ /* Puede que necesites ajustar esto o eliminarlo */
+    padding-right: 30px; /* Añade algo de espacio para que no se pegue al video */
+    z-index: 2;          /* Asegura que el texto esté sobre el video si hay superposición */
+    display: flex;       /* Opcional: para centrar verticalmente el contenido del texto */
+    flex-direction: column;
+    justify-content: center;
+    /* align-self: center; */ /* Descomenta si prefieres centrar verticalmente el bloque de texto */
+}
+
+.hero-image {
+    flex: 1; /* O ajusta el flex-basis si quieres un ancho más controlado, ej: flex: 0 0 50%; */
+    /* max-width: 45%; */ /* Quitar o ajustar según el diseño deseado */
+    height: 100vh;        /* Ocupa toda la altura de la ventana */
+    position: relative;   /* Necesario para algunos efectos de máscara o superposición */
+    overflow: hidden;     /* Oculta partes del video que se salgan */
+}
+
+
+.hero-image video {
+    width: 100%;          /* Ocupa todo el ancho del contenedor .hero-image */
+    height: 100%;         /* Ocupa toda la altura del contenedor .hero-image (100vh) */
+    object-fit: cover;    /* Mantiene proporción, cubre el área, recorta si es necesario */
+    filter: grayscale(100%);
+    display: block;
+    /* Ya no necesitamos border-radius si queremos fundido perfecto */
+    /* border-radius: 5px; */
+
+    /* --- Efecto de Fundido con Máscara --- */
+    /* Difumina los bordes izquierdo y derecho */
+    -webkit-mask-image: linear-gradient(to right,
+        rgba(0,0,0,0) 0%,    /* Totalmente transparente al inicio */
+        rgba(0,0,0,1) 15%,   /* Completamente opaco (visible) */
+        rgba(0,0,0,1) 85%,   /* Sigue opaco */
+        rgba(0,0,0,0) 100%   /* Totalmente transparente al final */
+    );
+    mask-image: linear-gradient(to right,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,1) 15%,
+        rgba(0,0,0,1) 85%,
+        rgba(0,0,0,0) 100%
+    );
+    /* Ajusta los porcentajes (15%, 85%) para controlar qué tan ancha es la zona de fundido */
+
+     /* Opcional: Añadir fundido inferior también */
+/*
+     -webkit-mask-image:
+        linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%),
+        linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 10%);
+     mask-image:
+        linear-gradient(to right, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%),
+        linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 10%);
+     -webkit-mask-composite: source-in;
+     mask-composite: intersect;
+*/
+
+}
+
+/* --- Hero Text Styling --- */
+.hero-text h1 {
+    font-size: 3.2rem; /* Large heading */
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+
+.hero-text h1 span {
+    color: #9333ea; /* Purple color */
+}
+
+.info-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 35px;
+}
+
+.qr-code {
+    width: 80px; /* Adjust QR code size */
+    height: 80px;
+    display: block;
+}
+
+.info-text p {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #b0b0b0;
+}
+
+.info-text .status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    color: #a0a0a0; /* Slightly dimmer status text */
+}
+
+.status .dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    background-color: #22c55e; /* Green color */
+    border-radius: 50%;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 30px;
+    border: 1px solid #9333ea; /* Purple border */
+    color: #e0e0e0;
+    background-color: transparent;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #9333ea;
+    color: #ffffff;
+}
+
+/* --- Footer --- */
+footer {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    width: 100%;
+    padding: 0 20px; /* Match container padding */
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    /* Ensure footer stays within the container width on large screens */
+    /* This requires the container relative positioning */
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 1200px; /* Same as container */
+}
+
+
+.social-links {
+    display: flex;
+    gap: 18px;
+}
+
+.social-links a {
+    color: #c0c0c0;
+    font-size: 1.1rem;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #ffffff;
+}
+
+.phone-number {
+    font-size: 0.9rem;
+    color: #a0a0a0;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    nav ul {
+        flex-wrap: wrap; /* Allow links to wrap */
+        gap: 15px;
+        justify-content: flex-start;
+    }
+
+    .hero {
+        flex-direction: column-reverse; /* Stack image above text */
+        text-align: center;
+    }
+
+    .hero-text {
+        max-width: 100%;
+    }
+
+    .hero-image {
+        max-width: 70%; /* Adjust image size on mobile */
+        margin-bottom: 30px;
+    }
+
+    .info-section {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .info-text {
+        text-align: center;
+    }
+
+    .hero-text h1 {
+        font-size: 2.5rem; /* Adjust heading size */
+    }
+
+    footer {
+        position: relative; /* Let it flow naturally */
+        bottom: auto;
+        left: auto;
+        transform: none;
+        margin-top: 40px; /* Add space above footer */
+        padding: 20px; /* Reset padding */
+        justify-content: center;
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+     nav ul {
+        gap: 10px;
+     }
+     nav ul li a {
+        font-size: 13px;
+     }
+    .hero-text h1 {
+        font-size: 2rem;
+    }
+    .cta-button {
+        padding: 10px 25px;
+    }
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .hero {
+        flex-direction: column-reverse;
+        min-height: 0; /* Resetear altura mínima en móvil */
+        /* O mantener min-height: 100vh; si quieres scroll en móvil */
+        align-items: center; /* Centrar en móvil */
+        height: auto; /* Altura automática en móvil */
+    }
+
+    .hero-text {
+        padding-right: 0; /* Quitar padding extra en móvil */
+        text-align: center;
+        margin-top: 40px; /* Espacio sobre el texto */
+        max-width: 90%; /* Limitar ancho en móvil */
+        align-self: auto; /* Resetear alineación */
+    }
+
+    .hero-image {
+        height: 60vh; /* O una altura fija o auto en móvil */
+        width: 100%; /* Ancho completo en móvil */
+        max-width: 100%;
+        flex: none; /* Resetear flex */
+    }
+
+     .hero-image video {
+         /* Quizás quitar la máscara en móvil o ajustarla */
+        -webkit-mask-image: none;
+        mask-image: none;
+     }
+
+    footer {
+        position: relative; /* Posición normal en móvil */
+        bottom: auto;
+        /* ... resto de ajustes responsivos del footer ... */
+    }
+    /* ... (otros ajustes responsivos) ... */
+}
+
+.video-container {
+    /* Estilos opcionales para el contenedor */
+    width: 100%; /* O el tamaño que necesites */
+    max-width: 600px; /* Ejemplo */
+    margin: auto;
+    position: relative; /* Útil si quieres superponer texto, etc. */
+}
+
+#myVideo {
+    display: block; /* Evita espacio extra debajo del video */
+    width: 100%;   /* Hace el video responsivo al contenedor */
+    height: auto;
+
+    /* --- Estilos para el Fade-in --- */
+    opacity: 0; /* Comienza invisible */
+    transition: opacity 1.5s ease-in-out; /* Duración y tipo de transición del fade */
+}
+
+#myVideo.loaded {
+    opacity: 1; /* Estado visible cuando se aplica la clase 'loaded' */
+}
